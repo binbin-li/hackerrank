@@ -76,7 +76,7 @@ void HRML::ParseLines(int nlines)
     HRML::field tmpfield;
     string sline, key, value;
     stringstream keys_and_values;
-    char equal_sign;
+    char equals_sign;
 
     auto match = smatch {};
     regex opening_line { R"(<(\w+)\s*(.*)>)" };
@@ -111,9 +111,9 @@ void HRML::ParseLines(int nlines)
 
             keys_and_values << match[2].str();
 
-            while(keys_and_values >> key >> equal_sign >> value)
+            // White spaces are needed around the equals sign
+            while(keys_and_values >> key >> equals_sign >> value)
             {
-                key.erase(remove(key.begin(), key.end(), '='), key.end());
                 value.erase(remove(value.begin(), value.end(), '"'), value.end());
                 tmpfield.attributes.push_back(pair<string, string>(key, value));
             }
@@ -163,8 +163,6 @@ int main() {
 
     HRML fieldsAndQueries(cin, nlines, nqueries);
 
-    //fieldsAndQueries.Test();
-    //cout << endl << endl;
     fieldsAndQueries.RunQueries();
 
     return 0;
