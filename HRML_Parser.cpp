@@ -10,7 +10,7 @@ class HRML
 {
 public:
 
-    HRML(istream& input, int nlines, int nqueries);
+    HRML(istream& input, ostream& output, int nlines, int nqueries);
     void RunQueries();
 
 private:
@@ -27,11 +27,12 @@ private:
     void ParseQueries(int nqueries);
 
     istream& m_input;
+    ostream& m_output;
     vector<field> m_fields;
     vector<string> m_queries;
 };
 
-HRML::HRML(istream& input, int nlines, int nqueries) : m_input(input)
+HRML::HRML(istream& input, ostream& output, int nlines, int nqueries) : m_input(input), m_output(output)
 {
     ParseLines(nlines);
     ParseQueries(nqueries);
@@ -58,7 +59,7 @@ void HRML::RunQueries()
                         if(k.first == match[2].str())
                         {
                             found = true;
-                            cout << k.second << endl;
+                            m_output << k.second << endl;
                             break;
                         }
                     }
@@ -161,8 +162,7 @@ int main() {
     cin >> nlines >> nqueries;
     cin.ignore(1, '\n');                                    // throw away the \n at the line end
 
-    HRML fieldsAndQueries(cin, nlines, nqueries);
-
+    HRML fieldsAndQueries(cin, cout, nlines, nqueries);
     fieldsAndQueries.RunQueries();
 
     return 0;
